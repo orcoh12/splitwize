@@ -22,10 +22,10 @@ export default function StatsPanel({ expenses, settlement }) {
   return (
     <div className="space-y-5">
       {/* Headline total */}
-      <div className="relative overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-bl from-cyan-500/10 to-indigo-500/10 p-6 text-center shadow-xl">
-        <div className="absolute -left-8 -top-8 h-32 w-32 rounded-full bg-cyan-500/20 blur-3xl animate-glow" />
-        <p className="text-sm font-medium text-slate-400">סך כל ההוצאות בטיול</p>
-        <p className="tabular mt-1 text-4xl font-black text-slate-50">{formatMoney(total)}</p>
+      <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-bl from-cyan-50 to-indigo-50 p-6 text-center shadow-sm">
+        <div className="absolute -left-8 -top-8 h-32 w-32 rounded-full bg-cyan-300/40 blur-3xl animate-glow" />
+        <p className="text-sm font-medium text-slate-500">סך כל ההוצאות בטיול</p>
+        <p className="tabular mt-1 text-4xl font-black text-slate-900">{formatMoney(total)}</p>
         <p className="mt-1 text-xs text-slate-500">{expenses.length} הוצאות</p>
       </div>
 
@@ -33,21 +33,21 @@ export default function StatsPanel({ expenses, settlement }) {
       <div className="grid grid-cols-2 gap-3">
         <StatCard
           icon={Crown}
-          tint="#fbbf24"
+          tint="#d97706"
           label="שילם הכי הרבה"
           value={top ? labelOf(top.name) : '—'}
           sub={top ? formatMoney(top.paid) : ''}
         />
         <StatCard
           icon={Coins}
-          tint="#34d399"
+          tint="#059669"
           label="שילם הכי מעט"
           value={bottom && bottom !== top ? labelOf(bottom.name) : '—'}
           sub={bottom && bottom !== top ? formatMoney(bottom.paid) : ''}
         />
         <StatCard
           icon={Flame}
-          tint="#fb7185"
+          tint="#e11d48"
           label="ההוצאה הגדולה"
           value={biggest ? formatMoney(biggest.amount) : '—'}
           sub={biggest ? biggest.description || labelOf(biggest.paid_by) : ''}
@@ -57,9 +57,9 @@ export default function StatsPanel({ expenses, settlement }) {
 
       {/* Per-person breakdown */}
       {chartData.length > 0 && (
-        <div className="rounded-3xl border border-slate-800 bg-slate-900/60 p-5 shadow-xl">
-          <h3 className="mb-3 flex items-center gap-2 text-lg font-bold text-slate-100">
-            <TrendingUp className="h-5 w-5 text-emerald-400" />
+        <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+          <h3 className="mb-3 flex items-center gap-2 text-lg font-bold text-slate-900">
+            <TrendingUp className="h-5 w-5 text-emerald-600" />
             פילוח לפי משלם
           </h3>
 
@@ -83,9 +83,10 @@ export default function StatsPanel({ expenses, settlement }) {
                   <Tooltip
                     formatter={(v) => formatMoney(v)}
                     contentStyle={{
-                      background: '#0f172a',
-                      border: '1px solid #334155',
+                      background: '#ffffff',
+                      border: '1px solid #e2e8f0',
                       borderRadius: 12,
+                      color: '#0f172a',
                       direction: 'rtl',
                     }}
                   />
@@ -105,11 +106,11 @@ export default function StatsPanel({ expenses, settlement }) {
                           className="inline-block h-2.5 w-2.5 rounded-full"
                           style={{ backgroundColor: e.color }}
                         />
-                        <span className="text-slate-300">{e.label}</span>
+                        <span className="text-slate-700">{e.label}</span>
                       </span>
-                      <span className="tabular text-slate-400">{formatMoney(e.paid)}</span>
+                      <span className="tabular text-slate-500">{formatMoney(e.paid)}</span>
                     </div>
-                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
+                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
                       <div
                         className="h-full rounded-full transition-all"
                         style={{ width: `${pct}%`, backgroundColor: e.color }}
@@ -129,7 +130,7 @@ export default function StatsPanel({ expenses, settlement }) {
 function StatCard({ icon: Icon, label, value, sub, tint, wide }) {
   return (
     <div
-      className={`rounded-2xl border border-slate-800 bg-slate-900/60 p-4 shadow-lg ${
+      className={`rounded-2xl border border-slate-200 bg-white p-4 shadow-sm ${
         wide ? 'col-span-2' : ''
       }`}
     >
@@ -137,8 +138,8 @@ function StatCard({ icon: Icon, label, value, sub, tint, wide }) {
         <Icon className="h-5 w-5" style={{ color: tint }} />
       </div>
       <p className="text-xs text-slate-500">{label}</p>
-      <p className="truncate text-lg font-bold text-slate-100">{value}</p>
-      {sub && <p className="tabular truncate text-sm text-slate-400">{sub}</p>}
+      <p className="truncate text-lg font-bold text-slate-900">{value}</p>
+      {sub && <p className="tabular truncate text-sm text-slate-500">{sub}</p>}
     </div>
   )
 }

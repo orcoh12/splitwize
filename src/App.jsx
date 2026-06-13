@@ -81,14 +81,14 @@ export default function App() {
   return (
     <div dir="rtl" lang="he" className="mx-auto flex min-h-full max-w-lg flex-col">
       {/* Header */}
-      <header className="sticky top-0 z-20 border-b border-slate-800/80 bg-slate-950/80 px-4 py-3 backdrop-blur-lg">
+      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/80 px-4 py-3 backdrop-blur-lg">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-bl from-cyan-400 to-indigo-500 font-black text-slate-950">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-bl from-cyan-400 to-indigo-500 font-black text-white shadow-sm">
               €
             </div>
             <div>
-              <h1 className="text-lg font-black leading-none text-slate-50">SplitWize</h1>
+              <h1 className="text-lg font-black leading-none text-slate-900">SplitWize</h1>
               <p className="text-[11px] text-slate-500">חשבון הטיול שלנו</p>
             </div>
           </div>
@@ -101,7 +101,7 @@ export default function App() {
         {loading ? (
           <div className="space-y-3">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-24 animate-pulse rounded-2xl bg-slate-900/60" />
+              <div key={i} className="h-24 animate-pulse rounded-2xl bg-slate-200" />
             ))}
           </div>
         ) : (
@@ -119,7 +119,7 @@ export default function App() {
       </main>
 
       {/* Bottom nav */}
-      <nav className="fixed inset-x-0 bottom-0 z-20 mx-auto max-w-lg border-t border-slate-800 bg-slate-950/90 px-2 pb-[env(safe-area-inset-bottom)] backdrop-blur-lg">
+      <nav className="fixed inset-x-0 bottom-0 z-20 mx-auto max-w-lg border-t border-slate-200 bg-white/90 px-2 pb-[env(safe-area-inset-bottom)] backdrop-blur-lg">
         <div className="grid grid-cols-3">
           {TABS.map((t) => {
             const Icon = t.icon
@@ -129,7 +129,7 @@ export default function App() {
                 key={t.key}
                 onClick={() => setTab(t.key)}
                 className={`flex flex-col items-center gap-0.5 py-3 text-xs font-medium transition ${
-                  active ? 'text-cyan-400' : 'text-slate-500'
+                  active ? 'text-cyan-600' : 'text-slate-400'
                 }`}
               >
                 <Icon className="h-5 w-5" strokeWidth={active ? 2.5 : 2} />
@@ -148,7 +148,7 @@ export default function App() {
             className={`animate-toast-in pointer-events-auto rounded-full px-5 py-2.5 text-sm font-semibold shadow-xl ${
               t.tone === 'error'
                 ? 'bg-rose-500 text-white'
-                : 'bg-slate-100 text-slate-900'
+                : 'bg-slate-900 text-white'
             }`}
           >
             {t.message}
@@ -175,7 +175,7 @@ function ConnectionBadge() {
   if (!isSupabaseConfigured) {
     return (
       <span
-        className="flex items-center gap-1.5 rounded-full bg-amber-500/15 px-2.5 py-1 text-[11px] font-semibold text-amber-300"
+        className="flex items-center gap-1.5 rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-semibold text-amber-700"
         title="הנתונים נשמרים מקומית בדפדפן. הגדירו Supabase לסנכרון בין מכשירים."
       >
         <CloudOff className="h-3.5 w-3.5" />
@@ -186,7 +186,7 @@ function ConnectionBadge() {
   return (
     <span
       className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${
-        online ? 'bg-emerald-500/15 text-emerald-300' : 'bg-rose-500/15 text-rose-300'
+        online ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'
       }`}
     >
       {online ? <Wifi className="h-3.5 w-3.5" /> : <WifiOff className="h-3.5 w-3.5" />}

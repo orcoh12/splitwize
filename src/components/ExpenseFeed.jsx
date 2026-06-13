@@ -18,9 +18,9 @@ export default function ExpenseFeed({ expenses, onDelete }) {
 
   if (expenses.length === 0) {
     return (
-      <div className="flex flex-col items-center gap-3 rounded-3xl border border-dashed border-slate-800 bg-slate-900/40 p-12 text-center">
-        <Receipt className="h-10 w-10 text-slate-600" />
-        <p className="text-slate-400">עדיין אין הוצאות. הוסיפו את הראשונה!</p>
+      <div className="flex flex-col items-center gap-3 rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center">
+        <Receipt className="h-10 w-10 text-slate-400" />
+        <p className="text-slate-500">עדיין אין הוצאות. הוסיפו את הראשונה!</p>
       </div>
     )
   }
@@ -33,7 +33,7 @@ export default function ExpenseFeed({ expenses, onDelete }) {
         return (
           <li
             key={e.id}
-            className="animate-pop-in relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 p-4 shadow-lg"
+            className="animate-pop-in relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
           >
             {/* Payer color stripe */}
             <span
@@ -46,13 +46,13 @@ export default function ExpenseFeed({ expenses, onDelete }) {
 
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline justify-between gap-2">
-                  <span className="truncate font-semibold text-slate-100">
+                  <span className="truncate font-semibold text-slate-900">
                     {labelOf(e.paid_by)}
                     {e.description && (
-                      <span className="font-normal text-slate-400"> · {e.description}</span>
+                      <span className="font-normal text-slate-500"> · {e.description}</span>
                     )}
                   </span>
-                  <span className="tabular shrink-0 text-lg font-bold text-slate-50">
+                  <span className="tabular shrink-0 text-lg font-bold text-slate-900">
                     {formatMoney(e.amount)}
                   </span>
                 </div>
@@ -73,15 +73,15 @@ export default function ExpenseFeed({ expenses, onDelete }) {
                 {/* Who it covers */}
                 <div className="mt-2 flex flex-wrap items-center gap-1.5">
                   {coversAll ? (
-                    <span className="rounded-full bg-slate-800 px-2 py-0.5 text-xs text-slate-300">
+                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
                       כולם · {formatMoney(e.amount / e.split_between.length)} לאחד
                     </span>
                   ) : (
                     e.split_between?.map((n) => (
                       <span
                         key={n}
-                        className="rounded-full px-2 py-0.5 text-xs font-medium"
-                        style={{ backgroundColor: `${colorOf(n)}22`, color: colorOf(n) }}
+                        className="rounded-full px-2 py-0.5 text-xs font-semibold"
+                        style={{ backgroundColor: `${colorOf(n)}26`, color: colorOf(n) }}
                       >
                         {labelOf(n)}
                       </span>
@@ -105,7 +105,7 @@ export default function ExpenseFeed({ expenses, onDelete }) {
                     </button>
                     <button
                       onClick={() => setConfirmId(null)}
-                      className="rounded-lg bg-slate-800 px-2 py-1 text-xs text-slate-300"
+                      className="rounded-lg bg-slate-200 px-2 py-1 text-xs text-slate-700"
                     >
                       ביטול
                     </button>
@@ -114,7 +114,7 @@ export default function ExpenseFeed({ expenses, onDelete }) {
                   <button
                     onClick={() => setConfirmId(e.id)}
                     aria-label="מחק הוצאה"
-                    className="rounded-lg p-2 text-slate-600 transition hover:bg-rose-500/10 hover:text-rose-400"
+                    className="rounded-lg p-2 text-slate-400 transition hover:bg-rose-50 hover:text-rose-600"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>

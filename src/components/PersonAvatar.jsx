@@ -25,7 +25,7 @@ export default function PersonAvatar({ name, size = 36, showName = false, classN
       >
         {initialsOf(name)}
       </span>
-      {showName && <span className="truncate font-medium text-slate-200">{labelOf(name)}</span>}
+      {showName && <span className="truncate font-medium text-slate-800">{labelOf(name)}</span>}
     </span>
   )
 }

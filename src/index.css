@@ -5,7 +5,7 @@
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 html,
@@ -20,8 +20,8 @@ body {
   text-align: right;
   font-family: var(--font-sans);
   line-height: 1.7;
-  background-color: #0b1120;
-  color: #e2e8f0;
+  background-color: #f1f5f9;
+  color: #0f172a;
   -webkit-font-smoothing: antialiased;
   /* Respect notches / home indicator on mobile */
   padding-bottom: env(safe-area-inset-bottom);
@@ -39,7 +39,7 @@ body {
   height: 8px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: #cbd5e1;
   border-radius: 9999px;
 }
 

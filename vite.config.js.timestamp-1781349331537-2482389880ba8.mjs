@@ -1,0 +1,14 @@
+// vite.config.js
+import { defineConfig } from "file:///Users/orcohen/Desktop/SplitWize/node_modules/vite/dist/node/index.js";
+import react from "file:///Users/orcohen/Desktop/SplitWize/node_modules/@vitejs/plugin-react/dist/index.js";
+import tailwindcss from "file:///Users/orcohen/Desktop/SplitWize/node_modules/@tailwindcss/vite/dist/index.mjs";
+var vite_config_default = defineConfig(() => ({
+  // GitHub Pages serves under /splitwize/; Vercel and local dev serve at root.
+  // The GitHub Actions workflow sets DEPLOY_TARGET=gh-pages.
+  base: process.env.DEPLOY_TARGET === "gh-pages" ? "/splitwize/" : "/",
+  plugins: [react(), tailwindcss()]
+}));
+export {
+  vite_config_default as default
+};
+//# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsidml0ZS5jb25maWcuanMiXSwKICAic291cmNlc0NvbnRlbnQiOiBbImNvbnN0IF9fdml0ZV9pbmplY3RlZF9vcmlnaW5hbF9kaXJuYW1lID0gXCIvVXNlcnMvb3Jjb2hlbi9EZXNrdG9wL1NwbGl0V2l6ZVwiO2NvbnN0IF9fdml0ZV9pbmplY3RlZF9vcmlnaW5hbF9maWxlbmFtZSA9IFwiL1VzZXJzL29yY29oZW4vRGVza3RvcC9TcGxpdFdpemUvdml0ZS5jb25maWcuanNcIjtjb25zdCBfX3ZpdGVfaW5qZWN0ZWRfb3JpZ2luYWxfaW1wb3J0X21ldGFfdXJsID0gXCJmaWxlOi8vL1VzZXJzL29yY29oZW4vRGVza3RvcC9TcGxpdFdpemUvdml0ZS5jb25maWcuanNcIjtpbXBvcnQgeyBkZWZpbmVDb25maWcgfSBmcm9tICd2aXRlJ1xuaW1wb3J0IHJlYWN0IGZyb20gJ0B2aXRlanMvcGx1Z2luLXJlYWN0J1xuaW1wb3J0IHRhaWx3aW5kY3NzIGZyb20gJ0B0YWlsd2luZGNzcy92aXRlJ1xuXG5leHBvcnQgZGVmYXVsdCBkZWZpbmVDb25maWcoKCkgPT4gKHtcbiAgLy8gR2l0SHViIFBhZ2VzIHNlcnZlcyB1bmRlciAvc3BsaXR3aXplLzsgVmVyY2VsIGFuZCBsb2NhbCBkZXYgc2VydmUgYXQgcm9vdC5cbiAgLy8gVGhlIEdpdEh1YiBBY3Rpb25zIHdvcmtmbG93IHNldHMgREVQTE9ZX1RBUkdFVD1naC1wYWdlcy5cbiAgYmFzZTogcHJvY2Vzcy5lbnYuREVQTE9ZX1RBUkdFVCA9PT0gJ2doLXBhZ2VzJyA/ICcvc3BsaXR3aXplLycgOiAnLycsXG4gIHBsdWdpbnM6IFtyZWFjdCgpLCB0YWlsd2luZGNzcygpXSxcbn0pKVxuIl0sCiAgIm1hcHBpbmdzIjogIjtBQUFrUixTQUFTLG9CQUFvQjtBQUMvUyxPQUFPLFdBQVc7QUFDbEIsT0FBTyxpQkFBaUI7QUFFeEIsSUFBTyxzQkFBUSxhQUFhLE9BQU87QUFBQTtBQUFBO0FBQUEsRUFHakMsTUFBTSxRQUFRLElBQUksa0JBQWtCLGFBQWEsZ0JBQWdCO0FBQUEsRUFDakUsU0FBUyxDQUFDLE1BQU0sR0FBRyxZQUFZLENBQUM7QUFDbEMsRUFBRTsiLAogICJuYW1lcyI6IFtdCn0K
