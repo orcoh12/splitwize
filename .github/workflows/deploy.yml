@@ -28,6 +28,8 @@ jobs:
       - run: npm test
       - run: npm run build
         env:
+          # Build for the /splitwize/ sub-path that GitHub Pages serves from.
+          DEPLOY_TARGET: gh-pages
           # Add these as repo secrets (Settings → Secrets and variables →
           # Actions) to enable real-time cross-device sync via Supabase.
           # Without them the app runs in local (per-device) mode.
