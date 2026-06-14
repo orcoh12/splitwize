@@ -71,6 +71,7 @@ export const db = {
       amount: expense.amount,
       description: expense.description || null,
       payment_method: expense.payment_method || 'cash',
+      currency: expense.currency || 'EUR',
       split_between: expense.split_between,
       created_at: expense.created_at || new Date().toISOString(),
     }

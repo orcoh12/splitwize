@@ -7,6 +7,7 @@ import StatsPanel from './components/StatsPanel'
 import { db, isSupabaseConfigured } from './lib/supabase'
 import { calculateSettlements } from './lib/settlements'
 import { PEOPLE_NAMES } from './lib/people'
+import { fetchEurIls, FALLBACK_EUR_ILS } from './lib/rates'
 
 const TABS = [
   { key: 'expenses', label: 'הוצאות', icon: Receipt },
@@ -19,6 +20,7 @@ export default function App() {
   const [loading, setLoading] = useState(true)
   const [tab, setTab] = useState('expenses')
   const [toasts, setToasts] = useState([])
+  const [fx, setFx] = useState({ rate: FALLBACK_EUR_ILS, live: false, date: null })
 
   const pushToast = useCallback((message, tone = 'default') => {
     const id = crypto.randomUUID?.() ?? String(Math.random())
@@ -44,6 +46,17 @@ export default function App() {
     const unsubscribe = db.subscribe(refresh)
     return unsubscribe
   }, [refresh])
+
+  // Fetch the current EUR→ILS rate once on mount (for ₪ settlement display).
+  useEffect(() => {
+    let alive = true
+    fetchEurIls().then((r) => {
+      if (alive) setFx(r)
+    })
+    return () => {
+      alive = false
+    }
+  }, [])
 
   const addExpense = async (expense) => {
     // Optimistic insert
@@ -74,8 +87,8 @@ export default function App() {
   }
 
   const settlement = useMemo(
-    () => calculateSettlements(expenses, { people: PEOPLE_NAMES }),
-    [expenses],
+    () => calculateSettlements(expenses, { people: PEOPLE_NAMES, rate: fx.rate }),
+    [expenses, fx.rate],
   )
 
   return (
@@ -112,7 +125,15 @@ export default function App() {
                 <ExpenseFeed expenses={expenses} onDelete={deleteExpense} />
               </div>
             )}
-            {tab === 'settle' && <SettlementView settlement={settlement} onToast={pushToast} />}
+            {tab === 'settle' && (
+              <SettlementView
+                settlement={settlement}
+                onToast={pushToast}
+                rate={fx.rate}
+                rateLive={fx.live}
+                rateDate={fx.date}
+              />
+            )}
             {tab === 'stats' && <StatsPanel expenses={expenses} settlement={settlement} />}
           </>
         )}

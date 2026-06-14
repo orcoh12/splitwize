@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Banknote, CreditCard, Plus, Users, Check } from 'lucide-react'
-import { PEOPLE, PEOPLE_NAMES, labelOf, colorOf } from '../lib/people'
+import { PEOPLE, PEOPLE_NAMES, labelOf, colorOf, currencySymbol } from '../lib/people'
 
 /** Local datetime string (YYYY-MM-DDTHH:mm) for the datetime-local input. */
 function nowLocal() {
@@ -12,6 +12,7 @@ function nowLocal() {
 export default function AddExpenseForm({ onAdd }) {
   const [paidBy, setPaidBy] = useState(PEOPLE[0].name)
   const [amount, setAmount] = useState('')
+  const [currency, setCurrency] = useState('EUR')
   const [method, setMethod] = useState('cash')
   const [description, setDescription] = useState('')
   const [split, setSplit] = useState(() => new Set(PEOPLE_NAMES))
@@ -29,6 +30,7 @@ export default function AddExpenseForm({ onAdd }) {
 
   const reset = () => {
     setAmount('')
+    setCurrency('EUR')
     setDescription('')
     setSplit(new Set(PEOPLE_NAMES))
     setMethod('cash')
@@ -47,6 +49,7 @@ export default function AddExpenseForm({ onAdd }) {
       await onAdd({
         paid_by: paidBy,
         amount: value,
+        currency,
         payment_method: method,
         description: description.trim(),
         split_between: PEOPLE_NAMES.filter((n) => split.has(n)),
@@ -71,9 +74,9 @@ export default function AddExpenseForm({ onAdd }) {
       </h2>
 
       {/* Amount — the headline field */}
-      <div className="relative mb-4">
+      <div className="relative mb-1.5">
         <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-slate-400">
-          €
+          {currencySymbol(currency)}
         </span>
         <input
           inputMode="decimal"
@@ -81,9 +84,30 @@ export default function AddExpenseForm({ onAdd }) {
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           placeholder="0.00"
-          className="tabular w-full rounded-2xl border border-slate-300 bg-slate-50 py-4 pr-12 pl-4 text-left text-3xl font-bold text-slate-900 outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/30"
+          className="tabular w-full rounded-2xl border border-slate-300 bg-slate-50 py-4 pr-12 pl-28 text-left text-3xl font-bold text-slate-900 outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/30"
         />
+        {/* Currency toggle — EUR is the default */}
+        <div className="absolute left-2 top-1/2 flex -translate-y-1/2 gap-0.5 rounded-xl bg-slate-100 p-0.5">
+          {['EUR', 'ILS'].map((c) => (
+            <button
+              type="button"
+              key={c}
+              onClick={() => setCurrency(c)}
+              aria-label={c === 'EUR' ? 'אירו' : 'שקל'}
+              className={`rounded-lg px-3 py-1.5 text-lg font-bold transition ${
+                currency === c ? 'bg-white text-slate-900 shadow' : 'text-slate-400'
+              }`}
+            >
+              {currencySymbol(c)}
+            </button>
+          ))}
+        </div>
       </div>
+      <p className="mb-4 text-xs text-slate-400">
+        {currency === 'ILS'
+          ? 'נרשם בשקלים · יחושב לאיחוד החשבון לפי השער הנוכחי'
+          : 'ברירת מחדל: אירו'}
+      </p>
 
       {/* Payer + method row */}
       <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2">

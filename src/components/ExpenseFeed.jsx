@@ -53,7 +53,7 @@ export default function ExpenseFeed({ expenses, onDelete }) {
                     )}
                   </span>
                   <span className="tabular shrink-0 text-lg font-bold text-slate-900">
-                    {formatMoney(e.amount)}
+                    {formatMoney(e.amount, e.currency)}
                   </span>
                 </div>
 
@@ -74,7 +74,7 @@ export default function ExpenseFeed({ expenses, onDelete }) {
                 <div className="mt-2 flex flex-wrap items-center gap-1.5">
                   {coversAll ? (
                     <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
-                      כולם · {formatMoney(e.amount / e.split_between.length)} לאחד
+                      כולם · {formatMoney(e.amount / e.split_between.length, e.currency)} לאחד
                     </span>
                   ) : (
                     e.split_between?.map((n) => (

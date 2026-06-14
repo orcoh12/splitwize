@@ -35,12 +35,25 @@ export function initialsOf(name) {
   return label.slice(0, 2)
 }
 
+// EUR is the base/default currency. ILS is an optional per-expense currency.
 export const CURRENCY = '€'
+export const DEFAULT_CURRENCY = 'EUR'
 
-/** Format a number as € currency for display (LTR-safe). */
-export function formatMoney(n) {
+const CURRENCY_SYMBOLS = { EUR: '€', ILS: '₪' }
+
+/** Symbol for a currency code (defaults to €). */
+export function currencySymbol(code) {
+  return CURRENCY_SYMBOLS[code] || CURRENCY_SYMBOLS.EUR
+}
+
+/**
+ * Format a number as currency for display (LTR-safe).
+ * @param {number} n        amount
+ * @param {string} currency 'EUR' (default) | 'ILS'
+ */
+export function formatMoney(n, currency = DEFAULT_CURRENCY) {
   const num = Number(n || 0)
-  return `${CURRENCY}${num.toLocaleString('he-IL', {
+  return `${currencySymbol(currency)}${num.toLocaleString('he-IL', {
     minimumFractionDigits: num % 1 === 0 ? 0 : 2,
     maximumFractionDigits: 2,
   })}`

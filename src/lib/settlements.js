@@ -20,6 +20,10 @@
 const toCents = (n) => Math.round(Number(n || 0) * 100)
 const toMoney = (cents) => Math.round(cents) / 100
 
+// EUR→ILS fallback (ILS per EUR), used only if no rate is supplied. The app
+// passes the live rate; this keeps the pure math safe in isolation/tests.
+const DEFAULT_RATE = 3.38
+
 /**
  * Greedy debt minimization: repeatedly settle the biggest creditor against
  * the biggest debtor. Produces a near-minimal number of transfers (optimal
@@ -77,7 +81,7 @@ export function minimizeTransfers(balancesCents) {
  *   total: number
  * }}
  */
-function tally(expenses, people) {
+function tally(expenses, people, rate = DEFAULT_RATE) {
   const perPerson = {}
   for (const name of people) {
     perPerson[name] = {
@@ -92,7 +96,12 @@ function tally(expenses, people) {
   let totalCents = 0
 
   for (const e of expenses) {
-    const amountCents = toCents(e.amount)
+    // Everything nets out in the EUR base. An expense entered in ILS is
+    // converted to EUR using the current rate (ILS per EUR). A missing/unknown
+    // currency is treated as EUR — this keeps every existing row unchanged.
+    const amountBase =
+      e.currency === 'ILS' ? Number(e.amount || 0) / (rate || DEFAULT_RATE) : Number(e.amount || 0)
+    const amountCents = toCents(amountBase)
     if (amountCents <= 0) continue
     totalCents += amountCents
 
@@ -164,17 +173,19 @@ export function calculateSettlements(expenses = [], opts = {}) {
     for (const n of e.split_between || []) found.add(n)
   }
   const people = opts.people && opts.people.length ? opts.people : [...found]
+  const rate = opts.rate || DEFAULT_RATE
 
-  const combined = tally(expenses, people)
+  const combined = tally(expenses, people, rate)
   const transfers = minimizeTransfers({ ...combined.balancesCents })
 
   const cashExpenses = expenses.filter((e) => e.payment_method !== 'credit')
   const creditExpenses = expenses.filter((e) => e.payment_method === 'credit')
-  const cash = tally(cashExpenses, people)
-  const credit = tally(creditExpenses, people)
+  const cash = tally(cashExpenses, people, rate)
+  const credit = tally(creditExpenses, people, rate)
 
   return {
     people,
+    rate,
     total: combined.total,
     perPerson: combined.perPerson,
     transfers,

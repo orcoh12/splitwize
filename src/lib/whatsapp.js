@@ -2,36 +2,42 @@ import { labelOf, formatMoney } from './people'
 
 /**
  * Build a paste-ready WhatsApp summary of the trip settlement.
- * Plain text + emojis so it reads well in the group chat.
+ * Totals are in EUR (the base currency); the settle-up balances and transfers
+ * are shown in ₪ at the current rate.
+ *
+ * @param {object} settlement  result of calculateSettlements
+ * @param {number} rate        ILS per EUR (current rate)
  */
-export function buildWhatsAppSummary(settlement) {
+export function buildWhatsAppSummary(settlement, rate = 3.38) {
   const { total, perPerson, transfers } = settlement
+  const ils = (v) => formatMoney((v || 0) * rate, 'ILS')
   const lines = []
 
   lines.push('💸 *סיכום חשבון הטיול* 💸')
   lines.push(`סה"כ הוצאות: ${formatMoney(total)}`)
+  lines.push(`שער סגירה: €1 = ₪${rate.toFixed(2)}`)
   lines.push('')
 
-  lines.push('*מאזן לכל אחד:*')
+  lines.push('*מאזן לכל אחד (בש"ח):*')
   for (const [name, p] of Object.entries(perPerson)) {
     const net = p.net
     const emoji = net > 0.001 ? '🟢' : net < -0.001 ? '🔴' : '⚪'
     const txt =
       net > 0.001
-        ? `מקבל ${formatMoney(net)}`
+        ? `מקבל ${ils(net)}`
         : net < -0.001
-          ? `חייב ${formatMoney(-net)}`
+          ? `חייב ${ils(-net)}`
           : 'מאוזן'
     lines.push(`${emoji} ${labelOf(name)}: ${txt}`)
   }
   lines.push('')
 
-  lines.push('*העברות לסגירת החשבון:*')
+  lines.push('*העברות לסגירת החשבון (בש"ח):*')
   if (transfers.length === 0) {
     lines.push('הכל מאוזן, אין מה להעביר! 🎉')
   } else {
     for (const t of transfers) {
-      lines.push(`➡️ ${labelOf(t.from)} ← ${labelOf(t.to)}: ${formatMoney(t.amount)}`)
+      lines.push(`➡️ ${labelOf(t.from)} ← ${labelOf(t.to)}: ${ils(t.amount)}`)
     }
   }
   lines.push('')

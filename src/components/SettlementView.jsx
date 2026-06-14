@@ -10,9 +10,12 @@ const TABS = [
   { key: 'credit', label: 'אשראי' },
 ]
 
-export default function SettlementView({ settlement, onToast }) {
+export default function SettlementView({ settlement, onToast, rate = 3.38, rateLive = true, rateDate = null }) {
   const [tab, setTab] = useState('combined')
   const [copied, setCopied] = useState(false)
+
+  // The ledger is in EUR; settlement is paid back in ₪ at the current rate.
+  const ils = (v) => formatMoney((v || 0) * rate, 'ILS')
 
   const view =
     tab === 'combined'
@@ -24,7 +27,7 @@ export default function SettlementView({ settlement, onToast }) {
   )
 
   const copySummary = async () => {
-    const text = buildWhatsAppSummary(settlement)
+    const text = buildWhatsAppSummary(settlement, rate)
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
@@ -50,6 +53,17 @@ export default function SettlementView({ settlement, onToast }) {
             {t.label}
           </button>
         ))}
+      </div>
+
+      {/* Exchange-rate badge — settlement is paid in ₪ */}
+      <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm shadow-sm">
+        <span className="font-medium text-slate-600">העברות בשקלים</span>
+        <span className="tabular font-semibold text-slate-800" dir="ltr">
+          €1 = ₪{rate.toFixed(2)}
+          <span className="mr-1 text-xs font-normal text-slate-400">
+            {rateLive ? (rateDate ? `· ${rateDate}` : '· עדכני') : '· משוער'}
+          </span>
+        </span>
       </div>
 
       {/* Transfers — the star of the show */}
@@ -82,7 +96,7 @@ export default function SettlementView({ settlement, onToast }) {
                   className="tabular shrink-0 rounded-full px-3 py-1 font-bold"
                   style={{ backgroundColor: `${colorOf(t.from)}26`, color: colorOf(t.from) }}
                 >
-                  {formatMoney(t.amount)}
+                  {ils(t.amount)}
                 </span>
               </li>
             ))}
@@ -126,12 +140,12 @@ export default function SettlementView({ settlement, onToast }) {
                     }`}
                   >
                     {positive ? '+' : ''}
-                    {formatMoney(net)}
+                    {ils(net)}
                   </span>
                 </div>
                 <div className="mt-1.5 flex justify-between text-xs text-slate-500">
-                  <span>שילם {formatMoney(p.paid)}</span>
-                  <span>חלקו {formatMoney(p.share)}</span>
+                  <span>שילם {ils(p.paid)}</span>
+                  <span>חלקו {ils(p.share)}</span>
                 </div>
               </li>
             )
